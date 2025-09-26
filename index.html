@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Galaxy Code - Premium Optimization</title>
+    <title>Galaxy Code - Ultimate PC Optimization</title>
     <link rel="stylesheet" href="style.css">
     <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -15,18 +15,30 @@
     <!-- Loading Screen -->
     <div class="loading-screen" id="loadingScreen">
         <div class="loading-content">
-            <div class="loading-logo">
-                <div class="logo-orb"></div>
-                <span>GALAXY CODE</span>
+            <div class="loading-orb">
+                <div class="orb"></div>
+                <div class="pulse"></div>
             </div>
-            <div class="loading-bar">
-                <div class="loading-progress"></div>
-            </div>
+            <h2>GALAXY CODE</h2>
+            <p>Initializing system...</p>
         </div>
     </div>
 
+    <!-- Theme Toggle -->
+    <div class="theme-toggle" onclick="toggleTheme()">
+        <i class="fas fa-moon"></i>
+        <i class="fas fa-sun"></i>
+    </div>
+
     <div class="container">
-        <!-- Floating Cart Icon -->
+        <!-- Floating Elements -->
+        <div class="floating-elements">
+            <div class="float-element el-1"><i class="fas fa-microchip"></i></div>
+            <div class="float-element el-2"><i class="fas fa-rocket"></i></div>
+            <div class="float-element el-3"><i class="fas fa-bolt"></i></div>
+        </div>
+
+        <!-- Cart Icon -->
         <div class="cart-icon" onclick="toggleCart()">
             <i class="fas fa-shopping-cart"></i>
             <span class="cart-count">0</span>
@@ -35,249 +47,456 @@
         <!-- Cart Sidebar -->
         <div class="cart-sidebar" id="cartSidebar">
             <div class="cart-header">
-                <h3><i class="fas fa-shopping-bag"></i> Koszyk</h3>
+                <h3><i class="fas fa-shopping-bag"></i> Shopping Cart</h3>
                 <button class="close-cart" onclick="toggleCart()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="cart-items" id="cartItems"></div>
             <div class="cart-total">
-                <span>Razem:</span>
+                <span>Total:</span>
                 <span id="cartTotal">0 zł</span>
             </div>
             <button class="checkout-btn" onclick="checkout()">
-                <i class="fas fa-credit-card"></i> Złóż zamówienie
+                <i class="fas fa-credit-card"></i> Proceed to Checkout
             </button>
-        </div>
-
-        <!-- Order Modal -->
-        <div class="modal" id="orderModal">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <div class="modal-icon">
-                        <i class="fab fa-discord"></i>
-                    </div>
-                    <h3>Potwierdzenie zamówienia</h3>
-                    <button class="close-modal" onclick="closeModal()">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <div class="order-summary">
-                        <h4>Podsumowanie zamówienia</h4>
-                        <div id="modalOrderItems"></div>
-                        <div class="order-total">
-                            <strong>Suma: <span id="modalTotal">0 zł</span></strong>
-                        </div>
-                    </div>
-                    
-                    <div class="discord-input">
-                        <label for="discordTag">
-                            <i class="fab fa-discord"></i> Twój Discord Tag
-                        </label>
-                        <input type="text" id="discordTag" placeholder="np. uzytkownik#1234" maxlength="37">
-                        <small>Na ten discord wyślemy informacje o zamówieniu</small>
-                    </div>
-                    
-                    <div class="modal-buttons">
-                        <button class="btn-cancel" onclick="closeModal()">
-                            <i class="fas fa-times"></i> Anuluj
-                        </button>
-                        <button class="btn-confirm" onclick="confirmOrder()">
-                            <i class="fas fa-check"></i> Potwierdź zamówienie
-                        </button>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- Header -->
         <header class="header">
-            <div class="logo">
-                <div class="logo-icon">
-                    <i class="fas fa-rocket"></i>
+            <nav class="navbar">
+                <div class="nav-logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-rocket"></i>
+                    </div>
+                    <span class="logo-text">GALAXY CODE</span>
                 </div>
-                <h1 class="galaxy-title">GALAXY CODE</h1>
-            </div>
-            <p class="subtitle">Maximum Performance Optimization</p>
-            <div class="header-stats">
-                <div class="stat">
-                    <i class="fas fa-bolt"></i>
-                    <span>+150% FPS</span>
+                <div class="nav-links">
+                    <a href="#features">Features</a>
+                    <a href="#reviews">Reviews</a>
+                    <a href="#faq">FAQ</a>
+                    <button class="nav-cta" onclick="scrollToOffers()">Get Started</button>
                 </div>
-                <div class="stat">
-                    <i class="fas fa-microchip"></i>
-                    <span>AMD/NVIDIA</span>
+            </nav>
+
+            <div class="hero">
+                <div class="hero-content">
+                    <h1 class="hero-title">
+                        <span class="title-gradient">ULTIMATE PC</span>
+                        <span class="title-main">OPTIMIZATION</span>
+                    </h1>
+                    <p class="hero-subtitle">Boost your gaming performance by up to <span class="highlight">150% FPS</span> with our advanced optimization chips</p>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-card">
+                            <i class="fas fa-chart-line"></i>
+                            <div class="stat-info">
+                                <span class="stat-number">+150%</span>
+                                <span class="stat-label">FPS Boost</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-bolt"></i>
+                            <div class="stat-info">
+                                <span class="stat-number">2.5x</span>
+                                <span class="stat-label">Faster Loading</span>
+                            </div>
+                        </div>
+                        <div class="stat-card">
+                            <i class="fas fa-shield-alt"></i>
+                            <div class="stat-info">
+                                <span class="stat-number">100%</span>
+                                <span class="stat-label">Safe</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-buttons">
+                        <button class="btn-primary" onclick="scrollToOffers()">
+                            <i class="fas fa-star"></i> View Packages
+                        </button>
+                        <button class="btn-secondary" onclick="scrollToFeatures()">
+                            <i class="fas fa-play-circle"></i> Watch Demo
+                        </button>
+                    </div>
                 </div>
-                <div class="stat">
-                    <i class="fas fa-shield-alt"></i>
-                    <span>100% Safe</span>
+                
+                <div class="hero-visual">
+                    <div class="pc-animation">
+                        <div class="pc-case">
+                            <div class="pc-glow"></div>
+                            <div class="pc-fans">
+                                <div class="fan fan-1"></div>
+                                <div class="fan fan-2"></div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         </header>
 
-        <!-- Offers Grid -->
-        <div class="offers-grid">
-            <!-- BASIC CHIP -->
-            <div class="offer-card basic">
-                <div class="offer-badge">FREE</div>
-                <div class="offer-icon">
-                    <i class="fas fa-star"></i>
-                </div>
-                <div class="offer-header">
-                    <h2>BASIC CHIP</h2>
-                    <div class="price">0 zł</div>
-                </div>
-                <div class="offer-features">
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Pod AMD i NVIDIA</span>
+        <!-- Features Section -->
+        <section class="features" id="features">
+            <div class="section-header">
+                <h2>Why Choose Galaxy Code?</h2>
+                <p>Advanced optimization technology for maximum performance</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-gamepad"></i>
                     </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Windows 10/11</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Podstawowa optymalizacja</span>
+                    <h3>Gaming Boost</h3>
+                    <p>Increase FPS and reduce input lag for competitive gaming</p>
+                    <div class="feature-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 95%"></div>
+                        </div>
+                        <span>95% Improvement</span>
                     </div>
                 </div>
-                <button class="buy-btn" onclick="addToCart('Basic Chip', 0)">
-                    <i class="fas fa-cart-plus"></i> Dodaj do koszyka
-                </button>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3>System Speed</h3>
+                    <p>Faster boot times and application loading speeds</p>
+                    <div class="feature-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 87%"></div>
+                        </div>
+                        <span>87% Faster</span>
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <div class="feature-icon">
+                        <i class="fas fa-temperature-low"></i>
+                    </div>
+                    <h3>Cooler System</h3>
+                    <p>Reduce temperatures and improve hardware longevity</p>
+                    <div class="feature-progress">
+                        <div class="progress-bar">
+                            <div class="progress-fill" style="width: 78%"></div>
+                        </div>
+                        <span>78% Cooler</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Offers Section -->
+        <section class="offers" id="offers">
+            <div class="section-header">
+                <h2>Optimization Packages</h2>
+                <p>Choose the perfect package for your needs</p>
             </div>
 
-            <!-- SUPER CHIP -->
-            <div class="offer-card super">
-                <div class="offer-badge">POPULAR</div>
-                <div class="offer-icon">
-                    <i class="fas fa-gem"></i>
+            <div class="offers-grid">
+                <!-- BASIC CHIP -->
+                <div class="offer-card basic" data-tilt>
+                    <div class="offer-badge">FREE</div>
+                    <div class="offer-icon">
+                        <i class="fas fa-star"></i>
+                    </div>
+                    <div class="offer-header">
+                        <h2>BASIC CHIP</h2>
+                        <div class="price">0 zł</div>
+                        <div class="price-subtitle">Lifetime Access</div>
+                    </div>
+                    <div class="offer-features">
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>AMD & NVIDIA Optimization</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Windows 10/11 Support</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Basic Performance Boost</span>
+                        </div>
+                    </div>
+                    <button class="buy-btn" onclick="addToCart('Basic Chip', 0)">
+                        <i class="fas fa-download"></i> Get Free
+                    </button>
                 </div>
-                <div class="offer-header">
-                    <h2>SUPER CHIP</h2>
-                    <div class="price">5 zł</div>
+
+                <!-- SUPER CHIP -->
+                <div class="offer-card super" data-tilt>
+                    <div class="offer-badge">POPULAR</div>
+                    <div class="offer-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <div class="offer-header">
+                        <h2>SUPER CHIP</h2>
+                        <div class="price">5 zł</div>
+                        <div class="price-subtitle">One-time Payment</div>
+                    </div>
+                    <div class="offer-features">
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>All Basic Features</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>GPU Settings Optimization</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Download Speed Boost</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Priority Support</span>
+                        </div>
+                    </div>
+                    <button class="buy-btn" onclick="addToCart('Super Chip', 5)">
+                        <i class="fas fa-bolt"></i> Boost Now
+                    </button>
                 </div>
-                <div class="offer-features">
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Pod AMD i NVIDIA</span>
+
+                <!-- ULTRA CHIP -->
+                <div class="offer-card ultra" data-tilt>
+                    <div class="offer-badge">PRO</div>
+                    <div class="offer-icon">
+                        <i class="fas fa-crown"></i>
                     </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Windows 10/11</span>
+                    <div class="offer-header">
+                        <h2>ULTRA CHIP</h2>
+                        <div class="price">15 zł</div>
+                        <div class="price-subtitle">Best Value</div>
                     </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Ustawienia GPU</span>
+                    <div class="offer-features">
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>All Super Features</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>BIOS Settings Optimization</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>CPU Taktowanie</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Maximum FPS Boost</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>System Stability</span>
+                        </div>
                     </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Lepszy Downloading</span>
-                    </div>
+                    <button class="buy-btn" onclick="addToCart('Ultra Chip', 15)">
+                        <i class="fas fa-fire"></i> Go Pro
+                    </button>
                 </div>
-                <button class="buy-btn" onclick="addToCart('Super Chip', 5)">
-                    <i class="fas fa-cart-plus"></i> Dodaj do koszyka
-                </button>
+
+                <!-- PC MAX CHIP -->
+                <div class="offer-card max" data-tilt>
+                    <div class="offer-badge">ULTIMATE</div>
+                    <div class="offer-icon">
+                        <i class="fas fa-infinity"></i>
+                    </div>
+                    <div class="offer-header">
+                        <h2>PC MAX CHIP</h2>
+                        <div class="price">30 zł</div>
+                        <div class="price-subtitle">Complete Package</div>
+                    </div>
+                    <div class="offer-features">
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>All Ultra Features</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Individual Optimization</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>24/7 Premium Support</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Performance Guarantee</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Lifetime Updates</span>
+                        </div>
+                    </div>
+                    <button class="buy-btn" onclick="addToCart('PC Max Chip', 30)">
+                        <i class="fas fa-rocket"></i> Ultimate Pack
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Reviews Section -->
+        <section class="reviews" id="reviews">
+            <div class="section-header">
+                <h2>What Gamers Say</h2>
+                <p>Join thousands of satisfied customers</p>
             </div>
 
-            <!-- ULTRA CHIP -->
-            <div class="offer-card ultra">
-                <div class="offer-badge">PRO</div>
-                <div class="offer-icon">
-                    <i class="fas fa-crown"></i>
+            <div class="reviews-slider">
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=John" alt="User">
+                        <div class="review-info">
+                            <h4>John_Doe</h4>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p>"From 60 to 144 FPS in Warzone! Galaxy Code transformed my gaming experience completely."</p>
+                    <span class="review-game">Call of Duty: Warzone</span>
                 </div>
-                <div class="offer-header">
-                    <h2>ULTRA CHIP</h2>
-                    <div class="price">15 zł</div>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=Sarah" alt="User">
+                        <div class="review-info">
+                            <h4>Sarah_Streams</h4>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star-half-alt"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <p>"My streaming quality improved dramatically. No more lag during intense gameplay moments!"</p>
+                    <span class="review-game">Fortnite Streamer</span>
                 </div>
-                <div class="offer-features">
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Pod AMD i NVIDIA</span>
+
+                <div class="review-card">
+                    <div class="review-header">
+                        <img src="https://api.dicebear.com/6.x/avataaars/svg?seed=Mike" alt="User">
+                        <div class="review-info">
+                            <h4>Mike_The_PC_Guy</h4>
+                            <div class="stars">
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                                <i class="fas fa-star"></i>
+                            </div>
+                        </div>
                     </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Windows 10/11</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Ustawienia BIOS</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Ustawienia GPU</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Taktowanie CPU</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Więcej FPS</span>
-                    </div>
+                    <p>"As a PC technician, I recommend Galaxy Code to all my clients. Professional and effective."</p>
+                    <span class="review-game">PC Technician</span>
                 </div>
-                <button class="buy-btn" onclick="addToCart('Ultra Chip', 15)">
-                    <i class="fas fa-cart-plus"></i> Dodaj do koszyka
-                </button>
+            </div>
+        </section>
+
+        <!-- FAQ Section -->
+        <section class="faq" id="faq">
+            <div class="section-header">
+                <h2>Frequently Asked Questions</h2>
+                <p>Everything you need to know</p>
             </div>
 
-            <!-- PC MAX CHIP -->
-            <div class="offer-card max">
-                <div class="offer-badge">ULTIMATE</div>
-                <div class="offer-icon">
-                    <i class="fas fa-infinity"></i>
-                </div>
-                <div class="offer-header">
-                    <h2>PC MAX CHIP</h2>
-                    <div class="price">30 zł</div>
-                </div>
-                <div class="offer-features">
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Wszystkie funkcje z poprzednich</span>
+            <div class="faq-grid">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Is this safe for my computer?</span>
+                        <i class="fas fa-chevron-down"></i>
                     </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Indywidualna optymalizacja</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Premium support 24/7</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Gwarancja wyników</span>
-                    </div>
-                    <div class="feature">
-                        <i class="fas fa-check"></i>
-                        <span>Priorytetowa obsługa</span>
+                    <div class="faq-answer">
+                        <p>Absolutely! Galaxy Code uses safe optimization techniques that don't harm your system. We've helped thousands of users without any issues.</p>
                     </div>
                 </div>
-                <button class="buy-btn" onclick="addToCart('PC Max Chip', 30)">
-                    <i class="fas fa-cart-plus"></i> Dodaj do koszyka
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How long does installation take?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Typically 5-15 minutes depending on your system. We provide step-by-step guides and support.</p>
+                    </div>
+                </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>Do you offer refunds?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Yes! 30-day money-back guarantee if you're not satisfied with the results.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CTA Section -->
+        <section class="cta">
+            <div class="cta-content">
+                <h2>Ready to Boost Your PC?</h2>
+                <p>Join thousands of gamers who already transformed their gaming experience</p>
+                <button class="cta-btn" onclick="scrollToOffers()">
+                    <i class="fas fa-rocket"></i> Get Started Now
                 </button>
             </div>
-        </div>
+        </section>
 
         <!-- Footer -->
         <footer class="footer">
             <div class="footer-content">
-                <div class="footer-logo">
-                    <i class="fas fa-rocket"></i>
-                    <span>GALAXY CODE</span>
+                <div class="footer-section">
+                    <div class="footer-logo">
+                        <i class="fas fa-rocket"></i>
+                        <span>GALAXY CODE</span>
+                    </div>
+                    <p>Ultimate PC optimization for gamers and content creators.</p>
                 </div>
-                <div class="footer-links">
-                    <a href="#"><i class="fab fa-discord"></i> Support</a>
-                    <a href="#"><i class="fas fa-shield-alt"></i> Privacy</a>
-                    <a href="#"><i class="fas fa-file-contract"></i> Terms</a>
+
+                <div class="footer-section">
+                    <h4>Quick Links</h4>
+                    <a href="#features">Features</a>
+                    <a href="#offers">Pricing</a>
+                    <a href="#reviews">Reviews</a>
+                    <a href="#faq">Support</a>
                 </div>
-                <p class="footer-copy">&copy; 2024 Galaxy Code. All rights reserved.</p>
+
+                <div class="footer-section">
+                    <h4>Contact</h4>
+                    <a href="#"><i class="fab fa-discord"></i> Discord Support</a>
+                    <a href="#"><i class="fas fa-envelope"></i> Email</a>
+                </div>
+
+                <div class="footer-section">
+                    <h4>Payment Methods</h4>
+                    <div class="payment-methods">
+                        <i class="fab fa-cc-paypal"></i>
+                        <i class="fab fa-cc-visa"></i>
+                        <i class="fab fa-cc-mastercard"></i>
+                        <i class="fab fa-bitcoin"></i>
+                    </div>
+                </div>
+            </div>
+
+            <div class="footer-bottom">
+                <p>&copy; 2024 Galaxy Code. All rights reserved.</p>
             </div>
         </footer>
     </div>
 
     <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tilt.js/1.2.1/tilt.jquery.min.js"></script>
     <script src="script.js"></script>
 </body>
 </html>
