@@ -1,6 +1,13 @@
-// 🔧 KONFIGURACJA WEBHOOK
+// 🔧 KONFIGURACJA
 const DISCORD_WEBHOOK_URL = 'https://discord.com/api/webhooks/1421240788985057542/Mi9w9x6mPLTVZvlSwBS_ahTkAi8jq7hEU-h0LlJqqc4a1OfWbN9Iy2zyYKL4pN0kZtXw';
-const DISCORD_INVITE_LINK = 'https://discord.gg/97RG2wc847'; // 🔧 Zmień na swój link Discord
+const DISCORD_INVITE_LINK = 'https://discord.gg/97RG2wc847'; // 🔧 ZMIENIĆ NA PRAWDZIWY LINK
+
+// COMING SOON Products
+const COMING_SOON_PRODUCTS = [
+    { name: 'Streamer Pack', price: 25, releaseDate: '2024-03-15' },
+    { name: 'VR Optimization', price: 40, releaseDate: '2024-04-01' },
+    { name: 'Enterprise Edition', price: 99, releaseDate: '2024-05-01' }
+];
 
 // Particle.js Config
 particlesJS('particles-js', {
@@ -47,7 +54,7 @@ class Cart {
         this.items.push({ name, price, id: Date.now() });
         this.save();
         this.updateCartDisplay();
-        this.showNotification(`✅ Dodano: ${name}`);
+        this.showNotification(`✅ Added to cart: ${name}`);
     }
 
     removeItem(id) {
@@ -85,7 +92,7 @@ class Cart {
         cartItems.innerHTML = '';
 
         if (this.items.length === 0) {
-            cartItems.innerHTML = '<div class="empty-cart"><i class="fas fa-shopping-cart"></i><p>Koszyk jest pusty</p></div>';
+            cartItems.innerHTML = '<div class="empty-cart"><i class="fas fa-shopping-cart"></i><p>Cart is empty</p></div>';
             return;
         }
 
@@ -105,16 +112,15 @@ class Cart {
         });
     }
 
-    showNotification(message) {
-        // Usuń istniejące notyfikacje
+    showNotification(message, type = 'success') {
         const existingNotifications = document.querySelectorAll('.notification');
         existingNotifications.forEach(notif => notif.remove());
 
         const notification = document.createElement('div');
-        notification.className = 'notification';
+        notification.className = `notification ${type}`;
         notification.innerHTML = `
             <div class="notification-content">
-                <i class="fas fa-check-circle"></i>
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
                 <span>${message}</span>
             </div>
         `;
@@ -123,15 +129,16 @@ class Cart {
             position: fixed;
             top: 100px;
             right: 30px;
-            background: var(--dark);
-            color: white;
+            background: var(--bg-secondary);
+            color: var(--text-primary);
             padding: 15px 20px;
             border-radius: 10px;
-            border-left: 4px solid var(--secondary);
+            border-left: 4px solid ${type === 'success' ? 'var(--secondary)' : 'var(--danger)'};
             z-index: 1001;
             animation: slideInRight 0.3s ease;
             box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            border: 1px solid rgba(255,255,255,0.1);
+            border: 1px solid var(--border-color);
+            max-width: 300px;
         `;
 
         document.body.appendChild(notification);
@@ -143,59 +150,148 @@ class Cart {
     }
 }
 
-// Inicjalizacja koszyka
+// Initialize Cart
 const cart = new Cart();
 
-// Generowanie numeru zamówienia
+// Theme Management
+function toggleTheme() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // Update theme toggle animation
+    const themeToggle = document.querySelector('.theme-toggle');
+    themeToggle.style.animation = 'none';
+    setTimeout(() => {
+        themeToggle.style.animation = 'bounce 0.5s ease';
+    }, 10);
+}
+
+// Initialize Theme
+function initTheme() {
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+}
+
+// Coming Soon Products
+function initComingSoon() {
+    COMING_SOON_PRODUCTS.forEach((product, index) => {
+        const card = document.querySelector(`.offer-card:nth-child(${index + 5})`);
+        if (card) {
+            card.classList.add('coming-soon');
+            
+            const overlay = document.createElement('div');
+            overlay.className = 'coming-soon-overlay';
+            overlay.innerHTML = `
+                <div class="coming-soon-content">
+                    <i class="fas fa-clock"></i>
+                    <h3>Coming Soon</h3>
+                    <p>${product.name} - ${product.price} zł</p>
+                    <div class="countdown" id="countdown-${index}">
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="days-${index}">00</span>
+                            <span class="countdown-label">Days</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="hours-${index}">00</span>
+                            <span class="countdown-label">Hours</span>
+                        </div>
+                        <div class="countdown-item">
+                            <span class="countdown-number" id="minutes-${index}">00</span>
+                            <span class="countdown-label">Minutes</span>
+                        </div>
+                    </div>
+                    <button class="notify-btn" onclick="notifyMe('${product.name}')">
+                        <i class="fas fa-bell"></i> Notify Me
+                    </button>
+                </div>
+            `;
+            
+            card.appendChild(overlay);
+            startCountdown(product.releaseDate, index);
+        }
+    });
+}
+
+function startCountdown(releaseDate, index) {
+    const countdownFunction = () => {
+        const now = new Date().getTime();
+        const release = new Date(releaseDate).getTime();
+        const distance = release - now;
+
+        const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+
+        document.getElementById(`days-${index}`).textContent = days.toString().padStart(2, '0');
+        document.getElementById(`hours-${index}`).textContent = hours.toString().padStart(2, '0');
+        document.getElementById(`minutes-${index}`).textContent = minutes.toString().padStart(2, '0');
+
+        if (distance < 0) {
+            clearInterval(countdownInterval);
+            document.querySelector(`#countdown-${index}`).innerHTML = '<span>Available Now!</span>';
+        }
+    };
+
+    countdownFunction();
+    const countdownInterval = setInterval(countdownFunction, 1000);
+}
+
+function notifyMe(productName) {
+    cart.showNotification(`We'll notify you when ${productName} is available!`, 'success');
+}
+
+// Generate Order Number
 function generateOrderNumber() {
     const timestamp = Date.now().toString().slice(-6);
     const random = Math.random().toString(36).substring(2, 6).toUpperCase();
     return `GC-${timestamp}-${random}`;
 }
 
-// Wysyłanie webhooka do Discorda
+// Discord Webhook
 async function sendDiscordWebhook(orderData) {
     const embed = {
-        title: "🚀 **NOWE ZAMÓWIENIE GALAXY CODE!**",
+        title: "🚀 **NEW GALAXY CODE ORDER!**",
         color: 0x6366f1,
         thumbnail: { url: "https://i.imgur.com/rocket.png" },
         fields: [
             {
-                name: "📋 **NUMER ZAMÓWIENIA**",
+                name: "📋 **ORDER NUMBER**",
                 value: `\`\`\`${orderData.orderNumber}\`\`\``,
                 inline: false
             },
             {
-                name: "👤 **DISCORD KLIENTA**",
+                name: "👤 **DISCORD TAG**",
                 value: `\`\`\`${orderData.discordTag}\`\`\``,
                 inline: false
             },
             {
-                name: "📦 **ZAMÓWIONE PRODUKTY**",
+                name: "📦 **ORDERED PRODUCTS**",
                 value: orderData.items.map(item => `• **${item.name}** - ${item.price} zł`).join('\n'),
                 inline: false
             },
             {
-                name: "💰 **SUMA ZAMÓWIENIA**",
+                name: "💰 **TOTAL AMOUNT**",
                 value: `**${orderData.total} zł**`,
                 inline: true
             },
             {
-                name: "🕒 **DATA ZŁOŻENIA**",
+                name: "🕒 **ORDER DATE**",
                 value: `<t:${Math.floor(Date.now() / 1000)}:F>`,
                 inline: true
             }
         ],
         footer: { 
-            text: "Galaxy Code System • " + new Date().toLocaleDateString('pl-PL'),
-            icon_url: "https://i.imgur.com/rocket.png" 
+            text: "Galaxy Code System • " + new Date().toLocaleDateString('pl-PL')
         },
         timestamp: new Date().toISOString()
     };
 
     const payload = {
         embeds: [embed],
-        content: `@here 🎉 **NOWE ZAMÓWIENIE!** Klient czeka na ticket!`
+        content: `@here 🎉 **NEW ORDER!** Customer waiting for ticket!`
     };
 
     try {
@@ -205,20 +301,28 @@ async function sendDiscordWebhook(orderData) {
             body: JSON.stringify(payload)
         });
 
-        if (response.ok) {
-            console.log('✅ Webhook wysłany pomyślnie');
-            return true;
-        } else {
-            console.error('❌ Błąd webhooka:', response.status);
-            return false;
-        }
+        return response.ok;
     } catch (error) {
-        console.error('❌ Błąd przy wysyłaniu webhooka:', error);
+        console.error('Webhook error:', error);
         return false;
     }
 }
 
-// Funkcje globalne
+// Navigation Functions
+function scrollToOffers() {
+    document.getElementById('offers').scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'start'
+    });
+}
+
+function scrollToFeatures() {
+    document.getElementById('features').scrollIntoView({ 
+        behavior: 'smooth' 
+    });
+}
+
+// Cart Functions
 function addToCart(name, price) {
     cart.addItem(name, price);
 }
@@ -243,15 +347,14 @@ function toggleCart() {
 
 function checkout() {
     if (cart.items.length === 0) {
-        showError('Koszyk jest pusty!');
+        cart.showNotification('Cart is empty!', 'error');
         return;
     }
-
     openModal();
 }
 
+// Modal Functions
 function openModal() {
-    // Aktualizuj podsumowanie w modal
     const modalItems = document.getElementById('modalOrderItems');
     const modalTotal = document.getElementById('modalTotal');
     
@@ -276,12 +379,12 @@ async function confirmOrder() {
     const discordRegex = /^.{3,32}#[0-9]{4}$|^[a-zA-Z0-9_]{2,32}$/;
 
     if (!discordTag) {
-        showError('Proszę podać swój tag Discorda!');
+        cart.showNotification('Please enter your Discord tag!', 'error');
         return;
     }
 
     if (!discordRegex.test(discordTag)) {
-        showError('Proszę podać poprawny tag Discorda (np. uzytkownik#1234 lub nazwa_użytkownika)');
+        cart.showNotification('Please enter a valid Discord tag (e.g., username#1234)', 'error');
         return;
     }
 
@@ -294,75 +397,27 @@ async function confirmOrder() {
         date: new Date().toISOString()
     };
 
-    // Pokazanie loading
     const confirmBtn = document.querySelector('.btn-confirm');
     const originalText = confirmBtn.innerHTML;
-    confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Wysyłanie...';
+    confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Processing...';
     confirmBtn.disabled = true;
 
-    // Wysyłanie webhooka
     const webhookSuccess = await sendDiscordWebhook(orderData);
 
     if (webhookSuccess) {
-        // Sukces
-        const successMessage = `🎉 **ZAMÓWIENIE ZŁOŻONE POMYŚLNIE!**
-
-📋 **Numer zamówienia:** ${orderNumber}
-👤 **Twój Discord:** ${discordTag}
-💰 **Do zapłaty:** ${orderData.total} zł
-
-🔗 **Wbij na Discord:** ${DISCORD_INVITE_LINK}
-🎫 **Stwórz ticket z numerem:** **${orderNumber}**
-
-Dziękujemy za zakupy! 🚀`;
-
-        showSuccess(successMessage);
-        
-        // Czyszczenie koszyka
+        showSuccessModal(orderData);
         cart.clear();
         closeModal();
         toggleCart();
     } else {
-        showError('❌ Błąd przy składaniu zamówienia. Spróbuj ponownie lub skontaktuj się z supportem.');
+        cart.showNotification('Order failed. Please try again or contact support.', 'error');
     }
 
     confirmBtn.innerHTML = originalText;
     confirmBtn.disabled = false;
 }
 
-function showError(message) {
-    const notification = document.createElement('div');
-    notification.className = 'notification error';
-    notification.innerHTML = `
-        <div class="notification-content">
-            <i class="fas fa-exclamation-circle"></i>
-            <span>${message}</span>
-        </div>
-    `;
-    
-    notification.style.cssText = `
-        position: fixed;
-        top: 100px;
-        right: 30px;
-        background: var(--danger);
-        color: white;
-        padding: 15px 20px;
-        border-radius: 10px;
-        z-index: 1001;
-        animation: slideInRight 0.3s ease;
-        box-shadow: 0 10px 30px rgba(239, 68, 68, 0.3);
-    `;
-
-    document.body.appendChild(notification);
-
-    setTimeout(() => {
-        notification.style.animation = 'slideOutRight 0.3s ease';
-        setTimeout(() => notification.remove(), 300);
-    }, 4000);
-}
-
-function showSuccess(message) {
-    // Custom success modal
+function showSuccessModal(orderData) {
     const successModal = document.createElement('div');
     successModal.className = 'modal active';
     successModal.innerHTML = `
@@ -371,18 +426,25 @@ function showSuccess(message) {
                 <div class="modal-icon">
                     <i class="fas fa-check-circle"></i>
                 </div>
-                <h3>Zamówienie złożone!</h3>
+                <h3>Order Confirmed! 🎉</h3>
                 <button class="close-modal" onclick="this.closest('.modal').remove()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="modal-body">
                 <div class="success-message">
-                    ${message.replace(/\n/g, '<br>')}
+                    <p><strong>Order Number:</strong> ${orderData.orderNumber}</p>
+                    <p><strong>Discord:</strong> ${orderData.discordTag}</p>
+                    <p><strong>Total:</strong> ${orderData.total} zł</p>
+                    <br>
+                    <p>📋 <strong>Join our Discord and create a ticket with your order number!</strong></p>
+                    <a href="discord.html" class="discord-btn" style="margin: 15px 0; display: inline-block;">
+                        <i class="fab fa-discord"></i> Join Discord
+                    </a>
                 </div>
                 <div class="modal-buttons">
                     <button class="btn-confirm" onclick="this.closest('.modal').remove()">
-                        <i class="fas fa-check"></i> Rozumiem
+                        <i class="fas fa-check"></i> Understood
                     </button>
                 </div>
             </div>
@@ -392,8 +454,64 @@ function showSuccess(message) {
     document.body.appendChild(successModal);
 }
 
-// Loading screen
-window.addEventListener('load', function() {
+// FAQ Accordion
+function initFAQ() {
+    const faqItems = document.querySelectorAll('.faq-item');
+    
+    faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        
+        question.addEventListener('click', () => {
+            // Close other items
+            faqItems.forEach(otherItem => {
+                if (otherItem !== item) {
+                    otherItem.classList.remove('active');
+                }
+            });
+            
+            // Toggle current item
+            item.classList.toggle('active');
+        });
+    });
+}
+
+// Initialize everything when DOM loads
+document.addEventListener('DOMContentLoaded', function() {
+    initTheme();
+    initComingSoon();
+    initFAQ();
+    
+    // Animate cards on load
+    const cards = document.querySelectorAll('.offer-card, .feature-card');
+    cards.forEach((card, index) => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(30px)';
+        
+        setTimeout(() => {
+            card.style.transition = 'all 0.6s ease';
+            card.style.opacity = '1';
+            card.style.transform = 'translateY(0)';
+        }, index * 150);
+    });
+
+    // Initialize tilt.js for 3D effects
+    if (typeof VanillaTilt !== 'undefined') {
+        VanillaTilt.init(document.querySelectorAll('.offer-card'), {
+            max: 15,
+            speed: 400,
+            glare: true,
+            'max-glare': 0.2
+        });
+    }
+
+    // Close modal with ESC
+    document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape') {
+            closeModal();
+        }
+    });
+
+    // Loading screen
     setTimeout(() => {
         document.getElementById('loadingScreen').style.opacity = '0';
         setTimeout(() => {
@@ -402,67 +520,29 @@ window.addEventListener('load', function() {
     }, 2000);
 });
 
-// Animacje CSS
+// Add CSS animations
 const style = document.createElement('style');
 style.textContent = `
-    @keyframes slideInRight {
-        from { transform: translateX(100%); opacity: 0; }
-        to { transform: translateX(0); opacity: 1; }
+    @keyframes bounce {
+        0%, 20%, 53%, 80%, 100% { transform: translate3d(0,0,0); }
+        40%, 43% { transform: translate3d(0,-10px,0); }
+        70% { transform: translate3d(0,-5px,0); }
+        90% { transform: translate3d(0,-2px,0); }
     }
     
-    @keyframes slideOutRight {
-        from { transform: translateX(0); opacity: 1; }
-        to { transform: translateX(100%); opacity: 0; }
+    .offer-card.coming-soon {
+        position: relative;
     }
     
-    .empty-cart {
-        text-align: center;
-        color: var(--gray);
-        padding: 40px 20px;
-    }
-    
-    .empty-cart i {
-        font-size: 3rem;
-        margin-bottom: 15px;
-        opacity: 0.5;
-    }
-    
-    .notification-content {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-    }
-    
-    .modal-item {
-        padding: 8px 0;
-        border-bottom: 1px solid rgba(255,255,255,0.05);
-    }
-    
-    .success-message {
-        line-height: 1.6;
-        margin-bottom: 20px;
-    }
-    
-    .btn-confirm:disabled {
-        opacity: 0.6;
+    .offer-card.coming-soon .buy-btn {
+        background: var(--gray) !important;
+        color: var(--text-secondary) !important;
         cursor: not-allowed;
+    }
+    
+    .offer-card.coming-soon .buy-btn:hover {
         transform: none !important;
-    }
-    
-    .fa-spinner {
-        animation: spin 1s linear infinite;
-    }
-    
-    @keyframes spin {
-        0% { transform: rotate(0deg); }
-        100% { transform: rotate(360deg); }
+        box-shadow: none !important;
     }
 `;
 document.head.appendChild(style);
-
-// Inicjalizacja particles
-window.addEventListener('resize', function() {
-    if (window.pJSDom && window.pJSDom[0] && window.pJSDom[0].pJS) {
-        window.pJSDom[0].pJS.fn.canvasRefresh();
-    }
-});
