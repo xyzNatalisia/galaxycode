@@ -47,19 +47,60 @@
         <!-- Cart Sidebar -->
         <div class="cart-sidebar" id="cartSidebar">
             <div class="cart-header">
-                <h3><i class="fas fa-shopping-bag"></i> Shopping Cart</h3>
+                <h3><i class="fas fa-shopping-bag"></i> Koszyk</h3>
                 <button class="close-cart" onclick="toggleCart()">
                     <i class="fas fa-times"></i>
                 </button>
             </div>
             <div class="cart-items" id="cartItems"></div>
             <div class="cart-total">
-                <span>Total:</span>
+                <span>Razem:</span>
                 <span id="cartTotal">0 zł</span>
             </div>
             <button class="checkout-btn" onclick="checkout()">
-                <i class="fas fa-credit-card"></i> Proceed to Checkout
+                <i class="fas fa-credit-card"></i> Złóż zamówienie
             </button>
+        </div>
+
+        <!-- Order Modal -->
+        <div class="modal" id="orderModal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <div class="modal-icon">
+                        <i class="fab fa-discord"></i>
+                    </div>
+                    <h3>Potwierdzenie zamówienia</h3>
+                    <button class="close-modal" onclick="closeModal()">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="order-summary">
+                        <h4>Podsumowanie zamówienia</h4>
+                        <div id="modalOrderItems"></div>
+                        <div class="order-total">
+                            <strong>Suma: <span id="modalTotal">0 zł</span></strong>
+                        </div>
+                    </div>
+                    
+                    <div class="discord-input">
+                        <label for="discordTag">
+                            <i class="fab fa-discord"></i> Twój Discord Tag
+                        </label>
+                        <input type="text" id="discordTag" placeholder="np. uzytkownik#1234" maxlength="37">
+                        <small>Na ten discord wyślemy informacje o zamówieniu</small>
+                    </div>
+                    
+                    <div class="modal-buttons">
+                        <button class="btn-cancel" onclick="closeModal()">
+                            <i class="fas fa-times"></i> Anuluj
+                        </button>
+                        <button class="btn-confirm" onclick="confirmOrder()">
+                            <i class="fas fa-check"></i> Potwierdź zamówienie
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Header -->
@@ -115,8 +156,8 @@
                         <button class="btn-primary" onclick="scrollToOffers()">
                             <i class="fas fa-star"></i> View Packages
                         </button>
-                        <button class="btn-secondary" onclick="scrollToFeatures()">
-                            <i class="fas fa-play-circle"></i> Watch Demo
+                        <button class="btn-secondary" onclick="openDiscord()">
+                            <i class="fab fa-discord"></i> Join Discord
                         </button>
                     </div>
                 </div>
@@ -334,6 +375,124 @@
                         <i class="fas fa-rocket"></i> Ultimate Pack
                     </button>
                 </div>
+
+                <!-- COMING SOON 1 -->
+                <div class="offer-card coming-soon" data-tilt>
+                    <div class="coming-soon-badge">COMING SOON</div>
+                    <div class="offer-icon">
+                        <i class="fas fa-broadcast-tower"></i>
+                    </div>
+                    <div class="offer-header">
+                        <h2>STREAMER PACK</h2>
+                        <div class="price">25 zł</div>
+                        <div class="price-subtitle">For Content Creators</div>
+                    </div>
+                    <div class="offer-features">
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Streaming Optimization</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>OBS Studio Boost</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>No Dropped Frames</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Custom Overlays</span>
+                        </div>
+                    </div>
+                    <button class="buy-btn" onclick="notifyComingSoon('Streamer Pack')" disabled>
+                        <i class="fas fa-clock"></i> Coming Soon
+                    </button>
+                    
+                    <div class="coming-soon-overlay">
+                        <div class="coming-soon-content">
+                            <i class="fas fa-rocket"></i>
+                            <h3>Coming Soon!</h3>
+                            <p>Streamer Pack - 25 zł</p>
+                            <div class="countdown" id="countdown-1">
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="days-1">00</span>
+                                    <span class="countdown-label">Days</span>
+                                </div>
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="hours-1">00</span>
+                                    <span class="countdown-label">Hours</span>
+                                </div>
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="minutes-1">00</span>
+                                    <span class="countdown-label">Minutes</span>
+                                </div>
+                            </div>
+                            <button class="notify-btn" onclick="notifyMe('Streamer Pack')">
+                                <i class="fas fa-bell"></i> Notify Me
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- COMING SOON 2 -->
+                <div class="offer-card coming-soon" data-tilt>
+                    <div class="coming-soon-badge">COMING SOON</div>
+                    <div class="offer-icon">
+                        <i class="fas fa-vr-cardboard"></i>
+                    </div>
+                    <div class="offer-header">
+                        <h2>VR OPTIMIZATION</h2>
+                        <div class="price">40 zł</div>
+                        <div class="price-subtitle">Virtual Reality Ready</div>
+                    </div>
+                    <div class="offer-features">
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>VR Headset Support</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Motion Smoothing</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>Zero Latency</span>
+                        </div>
+                        <div class="feature">
+                            <i class="fas fa-check"></i>
+                            <span>VR Game Optimizations</span>
+                        </div>
+                    </div>
+                    <button class="buy-btn" onclick="notifyComingSoon('VR Optimization')" disabled>
+                        <i class="fas fa-clock"></i> Coming Soon
+                    </button>
+                    
+                    <div class="coming-soon-overlay">
+                        <div class="coming-soon-content">
+                            <i class="fas fa-vr-cardboard"></i>
+                            <h3>Coming Soon!</h3>
+                            <p>VR Optimization - 40 zł</p>
+                            <div class="countdown" id="countdown-2">
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="days-2">00</span>
+                                    <span class="countdown-label">Days</span>
+                                </div>
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="hours-2">00</span>
+                                    <span class="countdown-label">Hours</span>
+                                </div>
+                                <div class="countdown-item">
+                                    <span class="countdown-number" id="minutes-2">00</span>
+                                    <span class="countdown-label">Minutes</span>
+                                </div>
+                            </div>
+                            <button class="notify-btn" onclick="notifyMe('VR Optimization')">
+                                <i class="fas fa-bell"></i> Notify Me
+                            </button>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -438,6 +597,16 @@
                         <p>Yes! 30-day money-back guarantee if you're not satisfied with the results.</p>
                     </div>
                 </div>
+
+                <div class="faq-item">
+                    <div class="faq-question">
+                        <span>How to get support?</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        <p>Join our Discord server for 24/7 support: <a href="https://discord.gg/97RG2wc847" target="_blank" style="color: var(--primary);">discord.gg/97RG2wc847</a></p>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -446,9 +615,14 @@
             <div class="cta-content">
                 <h2>Ready to Boost Your PC?</h2>
                 <p>Join thousands of gamers who already transformed their gaming experience</p>
-                <button class="cta-btn" onclick="scrollToOffers()">
-                    <i class="fas fa-rocket"></i> Get Started Now
-                </button>
+                <div class="cta-buttons">
+                    <button class="cta-btn" onclick="scrollToOffers()">
+                        <i class="fas fa-rocket"></i> Get Started Now
+                    </button>
+                    <button class="cta-btn-secondary" onclick="openDiscord()">
+                        <i class="fab fa-discord"></i> Join Our Discord
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -461,6 +635,11 @@
                         <span>GALAXY CODE</span>
                     </div>
                     <p>Ultimate PC optimization for gamers and content creators.</p>
+                    <div class="social-links">
+                        <a href="https://discord.gg/97RG2wc847" target="_blank" class="social-link">
+                            <i class="fab fa-discord"></i>
+                        </a>
+                    </div>
                 </div>
 
                 <div class="footer-section">
@@ -472,9 +651,16 @@
                 </div>
 
                 <div class="footer-section">
-                    <h4>Contact</h4>
-                    <a href="#"><i class="fab fa-discord"></i> Discord Support</a>
-                    <a href="#"><i class="fas fa-envelope"></i> Email</a>
+                    <h4>Contact & Support</h4>
+                    <a href="https://discord.gg/97RG2wc847" target="_blank">
+                        <i class="fab fa-discord"></i> Discord Support
+                    </a>
+                    <a href="mailto:support@galaxycode.com">
+                        <i class="fas fa-envelope"></i> Email Support
+                    </a>
+                    <a href="discord.html">
+                        <i class="fas fa-link"></i> Discord Invite Page
+                    </a>
                 </div>
 
                 <div class="footer-section">
@@ -489,7 +675,9 @@
             </div>
 
             <div class="footer-bottom">
-                <p>&copy; 2024 Galaxy Code. All rights reserved.</p>
+                <p>&copy; 2024 Galaxy Code. All rights reserved. | 
+                   <a href="https://discord.gg/97RG2wc847" target="_blank" style="color: var(--primary);">Join our Discord</a>
+                </p>
             </div>
         </footer>
     </div>
