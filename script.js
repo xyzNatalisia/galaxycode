@@ -766,7 +766,7 @@ function showOrderSuccess(orderData) {
                 <p><strong>Total:</strong> ${orderData.total} zł</p>
             </div>
             <div class="success-instructions">
-                <p>📋 <strong>Join our Discord and create a ticket with your order number!</strong></p>
+                <p>📋 <strong>Join our Discord and create a ticket with your order number! or send money through https://tipply.pl/@YoungMat</strong></p>
                 <button class="discord-btn" onclick="openDiscord()">
                     <i class="fab fa-discord"></i> Join Discord Server
                 </button>
@@ -831,3 +831,4 @@ if ('serviceWorker' in navigator) {
             });
     });
 }
+
